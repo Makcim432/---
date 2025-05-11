@@ -46,12 +46,12 @@ class Enemy(GameSprite):
     #движение врага
     def update(self):
         self.rect.y += self.speed
-        global lost
+        #global lost
         #исчезает, если дойдёт до края экрана
         if self.rect.y > win_height:
-            self.rect.x = randint(80, win_width - 80)
+            #self.rect.x = randint(80, win_width - 80)
             self.rect.y = 0
-            lost = lost + 1
+            #lost = lost + 1
 racket1 = Player('racket.png', 1, 100, 50, 200, 20)
 racket2 = Player2('racket.png', 650, 100, 50, 200, 20)
 tenis = Enemy('tenis.png', 300, 150, 100, 100, 20)
@@ -66,27 +66,47 @@ finish = False
 #основной цикл игры:
 run = True #флаг сбрасывается кнопкой закрытия окна
 clock = time.Clock()
-
 Reload = False
+
+
+speed_x = 3
+speed_y = 3
+
+
 while run:
     #событие нажатия на кнопку Закрыть
-    for e in event.get():
-        if e.type == QUIT:
-            run = False
+    
         #событие нажатия на пробел - спрайт стреляет
+
+
 
     racket1.update()
     racket2.update()
     tenis.update()
-            
+    
+    if finish != True:
+        tenis.rect.x += speed_x
+        tenis.rect.y += speed_y
+    
 
+    
     window.blit(background,(0,0)) 
     racket1.reset()
     racket2.reset()
     tenis.reset()
- 
-        #обновляем их в новом местоположении при каждой итерации цикла
 
+
+
+    if sprite.collide_rect(racket1, tenis) or sprite.collide_rect(racket2, tenis):
+        speed_x *= -1
+        #обновляем их в новом местоположении при каждой итерации цикла
+    for e in event.get():
+        if e.type == QUIT:
+            run = False
+    
+    
     clock.tick(40)
     display.update()
+
+
 
